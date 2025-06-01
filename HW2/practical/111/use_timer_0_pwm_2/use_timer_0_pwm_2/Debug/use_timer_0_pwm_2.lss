@@ -1,0 +1,263 @@
+
+use_timer_0_pwm_2.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000168  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000001dc  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000001  00800060  00800060  000001dc  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  000001dc  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000020c  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000028  00000000  00000000  00000248  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00000696  00000000  00000000  00000270  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 000005a4  00000000  00000000  00000906  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   000001bf  00000000  00000000  00000eaa  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000034  00000000  00000000  0000106c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    0000031f  00000000  00000000  000010a0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    000000d8  00000000  00000000  000013bf  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000018  00000000  00000000  00001497  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   8:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  10:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  18:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  1c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  24:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  2c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  34:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  38:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  3c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  44:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  48:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  4c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  50:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_clear_bss>:
+  60:	20 e0       	ldi	r18, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
+
+00000068 <.do_clear_bss_loop>:
+  68:	1d 92       	st	X+, r1
+
+0000006a <.do_clear_bss_start>:
+  6a:	a1 36       	cpi	r26, 0x61	; 97
+  6c:	b2 07       	cpc	r27, r18
+  6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
+  70:	0e 94 7b 00 	call	0xf6	; 0xf6 <main>
+  74:	0c 94 b2 00 	jmp	0x164	; 0x164 <_exit>
+
+00000078 <__bad_interrupt>:
+  78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000007c <adjustDutyCycle>:
+#include <util/delay.h>
+
+void adjustDutyCycle(void){
+	static unsigned char temp=0;
+	//increase duty cycle
+	if ((PINC&0x01)==0)
+  7c:	98 99       	sbic	0x13, 0	; 19
+  7e:	10 c0       	rjmp	.+32     	; 0xa0 <adjustDutyCycle+0x24>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  80:	2f e3       	ldi	r18, 0x3F	; 63
+  82:	8d e0       	ldi	r24, 0x0D	; 13
+  84:	93 e0       	ldi	r25, 0x03	; 3
+  86:	21 50       	subi	r18, 0x01	; 1
+  88:	80 40       	sbci	r24, 0x00	; 0
+  8a:	90 40       	sbci	r25, 0x00	; 0
+  8c:	e1 f7       	brne	.-8      	; 0x86 <adjustDutyCycle+0xa>
+  8e:	00 c0       	rjmp	.+0      	; 0x90 <adjustDutyCycle+0x14>
+  90:	00 00       	nop
+	{
+		_delay_ms(250);
+		if(temp<90) temp+=10;
+  92:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
+  96:	8a 35       	cpi	r24, 0x5A	; 90
+  98:	18 f4       	brcc	.+6      	; 0xa0 <adjustDutyCycle+0x24>
+  9a:	86 5f       	subi	r24, 0xF6	; 246
+  9c:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <_edata>
+	}
+	//Reset duty cycle
+	if ((PINC&0x02)==0)
+  a0:	99 99       	sbic	0x13, 1	; 19
+  a2:	0b c0       	rjmp	.+22     	; 0xba <adjustDutyCycle+0x3e>
+  a4:	2f e3       	ldi	r18, 0x3F	; 63
+  a6:	8d e0       	ldi	r24, 0x0D	; 13
+  a8:	93 e0       	ldi	r25, 0x03	; 3
+  aa:	21 50       	subi	r18, 0x01	; 1
+  ac:	80 40       	sbci	r24, 0x00	; 0
+  ae:	90 40       	sbci	r25, 0x00	; 0
+  b0:	e1 f7       	brne	.-8      	; 0xaa <adjustDutyCycle+0x2e>
+  b2:	00 c0       	rjmp	.+0      	; 0xb4 <adjustDutyCycle+0x38>
+  b4:	00 00       	nop
+	{
+		_delay_ms(250);
+		temp=0;
+  b6:	10 92 60 00 	sts	0x0060, r1	; 0x800060 <_edata>
+	}
+	//decrease duty cycle
+	if ((PINC&0x04)==0)
+  ba:	9a 99       	sbic	0x13, 2	; 19
+  bc:	10 c0       	rjmp	.+32     	; 0xde <adjustDutyCycle+0x62>
+  be:	2f e3       	ldi	r18, 0x3F	; 63
+  c0:	8d e0       	ldi	r24, 0x0D	; 13
+  c2:	93 e0       	ldi	r25, 0x03	; 3
+  c4:	21 50       	subi	r18, 0x01	; 1
+  c6:	80 40       	sbci	r24, 0x00	; 0
+  c8:	90 40       	sbci	r25, 0x00	; 0
+  ca:	e1 f7       	brne	.-8      	; 0xc4 <adjustDutyCycle+0x48>
+  cc:	00 c0       	rjmp	.+0      	; 0xce <adjustDutyCycle+0x52>
+  ce:	00 00       	nop
+	{
+		_delay_ms(250);
+		if(temp>0) temp-=10;
+  d0:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
+  d4:	88 23       	and	r24, r24
+  d6:	19 f0       	breq	.+6      	; 0xde <adjustDutyCycle+0x62>
+  d8:	8a 50       	subi	r24, 0x0A	; 10
+  da:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <_edata>
+	}
+	//duty cycle adjust
+	OCR0=(0xFF*temp)/100;
+  de:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
+  e2:	2f ef       	ldi	r18, 0xFF	; 255
+  e4:	82 9f       	mul	r24, r18
+  e6:	c0 01       	movw	r24, r0
+  e8:	11 24       	eor	r1, r1
+  ea:	64 e6       	ldi	r22, 0x64	; 100
+  ec:	70 e0       	ldi	r23, 0x00	; 0
+  ee:	0e 94 8a 00 	call	0x114	; 0x114 <__divmodhi4>
+  f2:	6c bf       	out	0x3c, r22	; 60
+  f4:	08 95       	ret
+
+000000f6 <main>:
+}
+
+//Main function
+int main(void){
+	//PC0...2 as digital inputs
+	DDRC=0b11111000;
+  f6:	88 ef       	ldi	r24, 0xF8	; 248
+  f8:	84 bb       	out	0x14, r24	; 20
+	//Set PC0...2 high
+	PORTC=0b00000111;
+  fa:	87 e0       	ldi	r24, 0x07	; 7
+  fc:	85 bb       	out	0x15, r24	; 21
+	//Clear duty cycle
+	OCR0=0x00;
+  fe:	1c be       	out	0x3c, r1	; 60
+	//Set PBC or OC0 to output -PWM
+	DDRB|=(1<<3);
+ 100:	bb 9a       	sbi	0x17, 3	; 23
+	//Select fast PWM mode, non inverting output
+	TCCR0|=(1<<COM01)|(1<<WGM00)|(1<<WGM01);
+ 102:	83 b7       	in	r24, 0x33	; 51
+ 104:	88 66       	ori	r24, 0x68	; 104
+ 106:	83 bf       	out	0x33, r24	; 51
+	//Set prescaler to 1:8
+	TCCR0|=(1<<CS01);
+ 108:	83 b7       	in	r24, 0x33	; 51
+ 10a:	82 60       	ori	r24, 0x02	; 2
+ 10c:	83 bf       	out	0x33, r24	; 51
+	//main program loop
+	while(1){
+		adjustDutyCycle();
+ 10e:	0e 94 3e 00 	call	0x7c	; 0x7c <adjustDutyCycle>
+ 112:	fd cf       	rjmp	.-6      	; 0x10e <main+0x18>
+
+00000114 <__divmodhi4>:
+ 114:	97 fb       	bst	r25, 7
+ 116:	07 2e       	mov	r0, r23
+ 118:	16 f4       	brtc	.+4      	; 0x11e <__divmodhi4+0xa>
+ 11a:	00 94       	com	r0
+ 11c:	07 d0       	rcall	.+14     	; 0x12c <__divmodhi4_neg1>
+ 11e:	77 fd       	sbrc	r23, 7
+ 120:	09 d0       	rcall	.+18     	; 0x134 <__divmodhi4_neg2>
+ 122:	0e 94 9e 00 	call	0x13c	; 0x13c <__udivmodhi4>
+ 126:	07 fc       	sbrc	r0, 7
+ 128:	05 d0       	rcall	.+10     	; 0x134 <__divmodhi4_neg2>
+ 12a:	3e f4       	brtc	.+14     	; 0x13a <__divmodhi4_exit>
+
+0000012c <__divmodhi4_neg1>:
+ 12c:	90 95       	com	r25
+ 12e:	81 95       	neg	r24
+ 130:	9f 4f       	sbci	r25, 0xFF	; 255
+ 132:	08 95       	ret
+
+00000134 <__divmodhi4_neg2>:
+ 134:	70 95       	com	r23
+ 136:	61 95       	neg	r22
+ 138:	7f 4f       	sbci	r23, 0xFF	; 255
+
+0000013a <__divmodhi4_exit>:
+ 13a:	08 95       	ret
+
+0000013c <__udivmodhi4>:
+ 13c:	aa 1b       	sub	r26, r26
+ 13e:	bb 1b       	sub	r27, r27
+ 140:	51 e1       	ldi	r21, 0x11	; 17
+ 142:	07 c0       	rjmp	.+14     	; 0x152 <__udivmodhi4_ep>
+
+00000144 <__udivmodhi4_loop>:
+ 144:	aa 1f       	adc	r26, r26
+ 146:	bb 1f       	adc	r27, r27
+ 148:	a6 17       	cp	r26, r22
+ 14a:	b7 07       	cpc	r27, r23
+ 14c:	10 f0       	brcs	.+4      	; 0x152 <__udivmodhi4_ep>
+ 14e:	a6 1b       	sub	r26, r22
+ 150:	b7 0b       	sbc	r27, r23
+
+00000152 <__udivmodhi4_ep>:
+ 152:	88 1f       	adc	r24, r24
+ 154:	99 1f       	adc	r25, r25
+ 156:	5a 95       	dec	r21
+ 158:	a9 f7       	brne	.-22     	; 0x144 <__udivmodhi4_loop>
+ 15a:	80 95       	com	r24
+ 15c:	90 95       	com	r25
+ 15e:	bc 01       	movw	r22, r24
+ 160:	cd 01       	movw	r24, r26
+ 162:	08 95       	ret
+
+00000164 <_exit>:
+ 164:	f8 94       	cli
+
+00000166 <__stop_program>:
+ 166:	ff cf       	rjmp	.-2      	; 0x166 <__stop_program>
